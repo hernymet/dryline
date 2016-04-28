@@ -4,7 +4,7 @@ import calendar
 
 server = ECMWFDataServer()
 
-for year in range(2015, 2016):
+for year in range(2014, 2015):
  print 'YEAR ',year
  for month in range(01,02):
   lastday1=calendar.monthrange(year,month)
