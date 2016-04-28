@@ -104,7 +104,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set cstyle 1'
 'define ukn=u*1.943'
 'define vkn=v*1.943'
-'d maskout((skip(ukn,3)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,3)'
+'d maskout((skip(ukn,12)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,12)'
 
 *Grafico el titulo
 

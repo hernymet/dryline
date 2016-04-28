@@ -1,11 +1,11 @@
-***********************************************************************
-* Grafica geopotencial y el gradiente de humedad específica en 925hPa *
-***********************************************************************
+***********************************************
+* Grafica geopotencial y viento en 1000hPa y el espesor 1000/500 *
+***********************************************
 'reinit' 
 'set display color white'
 'reset'
-'run jaecol'
-'set mpdset sa'
+'run jaecol.gs'
+'set mpdset hires'
 
 * Cambiar fecha en el nombre de archivo de los datos
 *****************************************************
@@ -21,14 +21,14 @@ cant_tiempos=124
 *****************************************************
 *****************************************************
 
-carpeta_salida='/home/hernymet/Documents/figuras_grads/925_geop_grad_q/'
+carpeta_salida='/home/hernymet/Documents/figuras_grads/1000-500/'
 'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20160101.nc'
 'sdfopen /home/hernymet/Documents/reanalisis/surface_geop_05.nc'
 
-'set lat -50 -25'
-'set lon 285 320'
 
-
+'set lat -55 -15'
+'set lon 260 320'
+'set mpdset sa'
 
 tinicio=hora 'Z' dia mes anio
 'set time 'tinicio
@@ -40,61 +40,48 @@ tiempo=tiempo_cero
 while ( tiempo < tiempo_cero+cant_tiempos )
 
 'set t ' tiempo
-'set lev 925'
 
+*ESPESOR 1000/500
 
-*GRADIENTE DE HUMEDAD ESPECÍFICA EN 925
-*ALGUNAS CONSTANTES DEL SCRIPT 'DYNAMIC.GS'
-
-'pi=3.14159'
-'dtr=pi/180'
-'a=6.37122e6'
-'omega=7.2921e-5'
-'g=9.8'
-'R=287'
-'define f=2*omega*sin(lat*dtr)'
-'define p=lev*100'
-
-'dy=cdiff(lat,y)*dtr*a'
-'dx=cdiff(lon,x)*dtr*a*cos(lat*dtr)'
-
-
-'dqdx=cdiff(q,x)/dx'
-'dqdy=cdiff(q,y)/dy'
-
-'define gq=sqrt((dqdx*dqdx)+(dqdy*dqdy))'
-
-'set clevs 3 4 5 6 7 8 9'
-'set ccols 0 23 25 26 27 28 29 30' 
-
+'set grads off'
 'set gxout shaded'
-'set grads off'
-'d maskout(gq*1e8,1500-z.2(t=1,z=1)/9.80665)'
-'run cbarn'
-
-
-* ALTURA GEOPOTENCIAL
-'set grads off'
-'set gxout contour'
+'set clevs 5160 5220 5280 5340 5400 5460 5520 5580 5640 5700 5760 5820'
+'set rbcols 49 48 47 46 45 44 43 42 41 21 22 23 24 25 26'
 'set cint 60'
-'set ccolor 59'
-'set cthick 6'
-'set cstyle 1'
-'set clab masked'
-'set clopts -1 6 0.10'
-'d smth9(maskout(z/9.80665,1500-z.2(t=1,z=1)/9.80665))'
-
-* HUMEDAD ESPECÍFICA
+'d maskout((z(lev=500)-z(lev=1000))/9.80665,2000-z.2(t=1,z=1)/9.80665)'
+'run cbarn 0.8 1 10.45'
 'set gxout contour'
-'set cint 2'
-'set ccolor 1'
-'set cthick 6'
-'set cstyle 1'
+'set ccolor 39'
+'set clab off'
+'set cint 60'
+'d maskout((z(lev=500)-z(lev=1000))/9.80665,2000-z.2(t=1,z=1)/9.80665)'
+
+* EN ROJO CONTORNOS DE 5400 Y 5700
+'set ccolor 0'
+'set gxout contour'
+'set clevs 5400 5700'
 'set clab masked'
-*'set clopts -1 4 0.13'
-'d smth9(maskout(q*1000,1500-z.2(t=1,z=1)/9.80665))'
+'set ccolor 2'
+'set cstyle 1'
+'set cthick 6'
+'set clopts 29 13 0.12'
+'d maskout((z(lev=500)-z(lev=1000))/9.80665,2000-z.2(t=1,z=1)/9.80665)'
+
+*GEOPOTENCIAL EN 1000 HPA
+'set lev 1000'
+'set ccolor 1'
+'set clab on'
+'set clskip 2'
+'set cint 40'
+'set clab masked'
+'set clskip 2'
+'set cthick 6'
+'set clopts -2 6 0.12'
+*'d smth9(maskout(geop,2000-HGTsfc))'
+'d maskout(z(lev=1000)/9.80665,2000-z.2(t=1,z=1)/9.80665)'
 
 *BARBAS
+'set grads off'
 'set gxout barb'
 'set strmden 4'
 'set ccolor 1'
@@ -102,7 +89,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set cstyle 1'
 'define ukn=u*1.943'
 'define vkn=v*1.943'
-'d maskout((skip(ukn,3)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,3)'
+'d skip(ukn,3);skip(vkn,3)'
 
 *Grafico el titulo
 
@@ -119,11 +106,11 @@ mes=substr(itime3,6,3)
 hora=substr(itime3,1,2)
 anio= substr(itime3,9,4)
 
-'draw title Altura geop (cont. violeta), humedad especifica (cont. negro, g/kg),\ grad. de q ((g/kg)/100km) y viento (kts) en 925 hPa 'itime1
+'draw title Altura geop. (lineas), viento en 1000 hPa (kts)\ y Espesor 500/1000 hPa (somb.), 'itime1
 
 *Guardamos la figura
 
-'printim 'carpeta_salida'/geop_grad_q_925_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
+'printim 'carpeta_salida'/1000-500_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
 
 *Borramos la pantalla
 'c'

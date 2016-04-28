@@ -103,7 +103,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set grads off'
 'define ukt=u*1.943'
 'define vkt=v*1.943'
-'d skip(maskout(ukt,1500-z.2(t=1,z=1)/9.80665),3);skip(maskout(vkt,1500-z.2(t=1,z=1)/9.80665),3)' 
+'d skip(maskout(ukt,1500-z.2(t=1,z=1)/9.80665),12);skip(maskout(vkt,1500-z.2(t=1,z=1)/9.80665),12)' 
 
 
 *Grafico el titulo

@@ -1,5 +1,5 @@
 ***********************************************************************
-* Grafica geopotencial y el gradiente de temperatura en 925hPa *
+* Grafica geopotencial y el gradiente de humedad específica en 925hPa *
 ***********************************************************************
 'reinit' 
 'set display color white'
@@ -10,7 +10,7 @@
 * Cambiar fecha en el nombre de archivo de los datos
 *****************************************************
 *****************************************************
-anio='2014'
+anio='2016'
 mes='JAN'
 mes_num='01'
 dia='01'
@@ -21,13 +21,13 @@ cant_tiempos=124
 *****************************************************
 *****************************************************
 
-carpeta_salida='/home/hernymet/Documents/figuras_grads/925_geop_grad_temp/'
-'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20140101.nc'
+carpeta_salida='/home/hernymet/Documents/figuras_grads/925_geop_grad_q/'
+'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20160101.nc'
 'sdfopen /home/hernymet/Documents/reanalisis/surface_geop_05.nc'
-
 
 'set lat -50 -25'
 'set lon 285 320'
+
 
 
 tinicio=hora 'Z' dia mes anio
@@ -43,7 +43,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set lev 925'
 
 
-*GRADIENTE DE TEMPERATURA EN 925
+*GRADIENTE DE HUMEDAD ESPECÍFICA EN 925
 *ALGUNAS CONSTANTES DEL SCRIPT 'DYNAMIC.GS'
 
 'pi=3.14159'
@@ -59,23 +59,22 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'dx=cdiff(lon,x)*dtr*a*cos(lat*dtr)'
 
 
-'dtdx=cdiff(t,x)/dx'
-'dtdy=cdiff(t,y)/dy'
+'dqdx=cdiff(q,x)/dx'
+'dqdy=cdiff(q,y)/dy'
 
-'define gt=sqrt((dtdx*dtdx)+(dtdy*dtdy))'
+'define gq=sqrt((dqdx*dqdx)+(dqdy*dqdy))'
 
-'set clevs 4 6 8 10 12'
-'set ccols 0 65 67 69 57 59'
-*'set ccols 0 63 65 66 67 68 69 70' 
+'set clevs 3 4 5 6 7 8 9'
+'set ccols 0 23 25 26 27 28 29 30' 
 
-'set grads off'
 'set gxout shaded'
-'d smth9(maskout(gt*1e5,1500-z.2(t=1,z=1)/9.80665))'
+'set grads off'
+'d maskout(gq*1e8,1500-z.2(t=1,z=1)/9.80665)'
 'run cbarn'
 
+
 * ALTURA GEOPOTENCIAL
-
-
+'set grads off'
 'set gxout contour'
 'set cint 60'
 'set ccolor 59'
@@ -85,16 +84,15 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set clopts -1 6 0.10'
 'd smth9(maskout(z/9.80665,1500-z.2(t=1,z=1)/9.80665))'
 
-* TEMPERATURA
+* HUMEDAD ESPECÍFICA
 'set gxout contour'
-'set cint 4'
-*'set cmin 2'
+'set cint 2'
 'set ccolor 1'
 'set cthick 6'
 'set cstyle 1'
 'set clab masked'
 *'set clopts -1 4 0.13'
-'d smth9(maskout(t-273.15,1500-z.2(t=1,z=1)/9.80665))'
+'d smth9(maskout(q*1000,1500-z.2(t=1,z=1)/9.80665))'
 
 *BARBAS
 'set gxout barb'
@@ -104,7 +102,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set cstyle 1'
 'define ukn=u*1.943'
 'define vkn=v*1.943'
-'d maskout((skip(ukn,3)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,3)'
+'d maskout((skip(ukn,12)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,12)'
 
 *Grafico el titulo
 
@@ -121,11 +119,11 @@ mes=substr(itime3,6,3)
 hora=substr(itime3,1,2)
 anio= substr(itime3,9,4)
 
-'draw title Altura geop (cont. violeta), Temperatura (cont. negro, C)\ grad. de T (C/100Km) y viento (kts) en 925 hPa 'itime1
+'draw title Altura geop (cont. violeta), humedad especifica (cont. negro, g/kg),\ grad. de q ((g/kg)/100km) y viento (kts) en 925 hPa 'itime1
 
 *Guardamos la figura
 
-'printim 'carpeta_salida'/geop_grad_temp_925_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
+'printim 'carpeta_salida'/geop_grad_q_925_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
 
 *Borramos la pantalla
 'c'
