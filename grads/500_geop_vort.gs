@@ -10,9 +10,9 @@
 * Cambiar fecha en el nombre de archivo de los datos
 *****************************************************
 *****************************************************
-anio='2014'
-mes='JAN'
-mes_num='01'
+anio='2013'
+mes='DEC'
+mes_num='12'
 dia='01'
 hora='00'
 *nombre_archivo='ERA-Int_pl_' anio mes_num '.nc'
@@ -22,7 +22,7 @@ cant_tiempos=124
 *****************************************************
 
 carpeta_salida='/home/hernymet/Documents/figuras_grads/geop_vort_rel_500/'
-'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20140101.nc'
+'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20131201.nc'
 
 'set lat -55 -15'
 'set lon 260 320'

@@ -10,9 +10,9 @@
 * Cambiar fecha en el nombre de archivo de los datos
 *****************************************************
 *****************************************************
-anio='2016'
-mes='JAN'
-mes_num='01'
+anio='2013'
+mes='DEC'
+mes_num='12'
 dia='01'
 hora='00'
 *nombre_archivo='ERA-Int_pl_' anio mes_num '.nc'
@@ -22,7 +22,7 @@ cant_tiempos=124
 *****************************************************
 
 carpeta_salida='/home/hernymet/Documents/figuras_grads/1000-500/'
-'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20160101.nc'
+'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20131201.nc'
 'sdfopen /home/hernymet/Documents/reanalisis/surface_geop_05.nc'
 
 
@@ -89,7 +89,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set cstyle 1'
 'define ukn=u*1.943'
 'define vkn=v*1.943'
-'d skip(ukn,3);skip(vkn,3)'
+'d skip(ukn,6);skip(vkn,6)'
 
 *Grafico el titulo
 

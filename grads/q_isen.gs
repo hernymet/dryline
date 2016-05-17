@@ -1,0 +1,140 @@
+*******************************************************
+* Grafica q y su gradiente en coordenadas isentrópicas*
+*******************************************************
+
+
+'reinit' 
+'set display color white'
+'reset'
+'run jaecol'
+'set mpdset sa'
+
+* Cambiar fecha en el nombre de archivo de los datos
+*****************************************************
+*****************************************************
+anio='2013'
+mes='DEC'
+mes_num='12'
+dia='01'
+hora='00'
+*nombre_archivo='ERA-Int_pl_' anio mes_num '.nc'
+* Ingresar la cantidad total de tiempos del archivo (VER CANTIDAD DE GRÁFICOS MATLAB)
+cant_tiempos=124
+*****************************************************
+*****************************************************
+
+carpeta_salida='/home/hernymet/Documents/figuras_grads/q_isen/'
+'open /home/hernymet/Documents/reanalisis/ERA-Int_isen_20131201.ctl'
+'sdfopen /home/hernymet/Documents/reanalisis/surface_geop_05.nc'
+
+'set lat -50 -25'
+'set lon 285 320'
+
+
+
+tinicio=hora 'Z' dia mes anio
+'set time 'tinicio
+'q dims'
+linea1=sublin(result,5)
+tiempo_cero=subwrd(linea1,9)
+tiempo=tiempo_cero
+
+while ( tiempo < tiempo_cero+cant_tiempos )
+
+'set t ' tiempo
+'set lev 300'
+
+
+*GRADIENTE DE HUMEDAD ESPECÍFICA EN 925
+*ALGUNAS CONSTANTES DEL SCRIPT 'DYNAMIC.GS'
+
+'pi=3.14159'
+'dtr=pi/180'
+'a=6.37122e6'
+'omega=7.2921e-5'
+'g=9.8'
+'R=287'
+'define f=2*omega*sin(lat*dtr)'
+'define p=lev*100'
+
+'dy=cdiff(lat,y)*dtr*a'
+'dx=cdiff(lon,x)*dtr*a*cos(lat*dtr)'
+
+
+'dqdx=cdiff(qtht,x)/dx'
+'dqdy=cdiff(qtht,y)/dy'
+
+'define gq=sqrt((dqdx*dqdx)+(dqdy*dqdy))'
+
+'set clevs 3 4 5 6 7 8 9'
+'set ccols 0 23 25 26 27 28 29 30' 
+
+'set gxout shaded'
+'set grads off'
+'d maskout(gq*1e8,1500-z.2(t=1,z=1)/9.80665)'
+'run cbarn'
+
+
+* HUMEDAD ESPECÍFICA
+'set gxout contour'
+'set cint 2'
+'set ccolor 1'
+'set cthick 6'
+'set cstyle 1'
+'set clab masked'
+*'set clopts -1 4 0.13'
+'d smth9(maskout(qtht*1000,1500-z.2(t=1,z=1)/9.80665))'
+
+
+* PRESIÓN
+'set grads off'
+'set gxout contour'
+'set cint 60'
+'set ccolor 59'
+'set cthick 6'
+'set cstyle 1'
+'set clab masked'
+'set clopts -1 6 0.10'
+'d smth9(maskout(prestht/100,1500-z.2(t=1,z=1)/9.80665))'
+
+
+*BARBAS
+'set gxout barb'
+'set strmden 4'
+'set ccolor 1'
+'set cthick 3'
+'set cstyle 1'
+'define ukn=utht*1.943'
+'define vkn=vtht*1.943'
+'d maskout((skip(ukn,3)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,3)'
+
+*Grafico el titulo
+
+'q dims'
+line1=sublin(result,5)
+itime1=subwrd(line1,6)
+
+itime2=subwrd(line1,9)
+'q dims'
+line2=sublin(result,5)
+itime3=subwrd(line2,6)
+dia=substr(itime3,4,2)
+mes=substr(itime3,6,3)
+hora=substr(itime3,1,2)
+anio= substr(itime3,9,4)
+
+'draw title Humedad especifica (cont. negro, g/kg), grad. de q ((g/kg)/100km)\ y viento (kts) en 300 K 'itime1
+
+*Guardamos la figura
+
+'printim 'carpeta_salida'/q_isen_300_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
+
+*Borramos la pantalla
+'c'
+*Avanzamos el contador para pasar al tiempo siguiente.
+itime4=subwrd(line2,9)
+tiempo=itime4 + 1
+endwhile
+
+
+
