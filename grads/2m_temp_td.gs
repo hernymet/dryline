@@ -11,8 +11,8 @@
 *****************************************************
 *****************************************************
 anio='2016'
-mes='JAN'
-mes_num='01'
+mes='FEB'
+mes_num='02'
 dia='01'
 hora='00'
 *nombre_archivo='ERA-Int_pl_' anio mes_num '.nc'
@@ -21,7 +21,7 @@ cant_tiempos=124
 *****************************************************
 *****************************************************
 carpeta_salida='/home/hernymet/Documents/figuras_grads/temp_td/'
-'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_sup_20160101.nc'
+'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_sup_20160201.nc'
 'sdfopen /home/hernymet/Documents/reanalisis/mask.nc'
 
 'set lat -50 -25'

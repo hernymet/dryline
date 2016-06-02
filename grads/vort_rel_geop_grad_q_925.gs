@@ -1,8 +1,6 @@
-*******************************************************
-* Grafica q y su gradiente en coordenadas isentrópicas*
-*******************************************************
-
-
+********************************************************************************************
+* Grafica geopotencial, vorticidad relativa y el gradiente de humedad específica en 925hPa *
+********************************************************************************************
 'reinit' 
 'set display color white'
 'reset'
@@ -12,19 +10,19 @@
 * Cambiar fecha en el nombre de archivo de los datos
 *****************************************************
 *****************************************************
-anio='2016'
-mes='JAN'
-mes_num='01'
-dia='01'
+anio='2013'
+mes='DIC'
+mes_num='12'
+dia='17'
 hora='00'
 *nombre_archivo='ERA-Int_pl_' anio mes_num '.nc'
-* Ingresar la cantidad total de tiempos del archivo (VER CANTIDAD DE GRÁFICOS MATLAB)
-cant_tiempos=124
+* Ingresar la cantidad total de tiempos
+cant_tiempos=24
 *****************************************************
 *****************************************************
 
-carpeta_salida='/home/hernymet/Documents/figuras_grads/q_isen/'
-'open /home/hernymet/Documents/reanalisis/ERA-Int_isen_20160101.ctl'
+carpeta_salida='/home/hernymet/Documents/figuras_grads/925_vort_geop_grad_q/'
+'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20131201.nc'
 'sdfopen /home/hernymet/Documents/reanalisis/surface_geop_05.nc'
 
 'set lat -50 -25'
@@ -42,8 +40,21 @@ tiempo=tiempo_cero
 while ( tiempo < tiempo_cero+cant_tiempos )
 
 'set t ' tiempo
-'set lev 300'
+'set lev 925'
 
+
+* Vorticidad relativa
+'set grads off'
+'set gxout shaded'
+'set clevs   -12 -10 -8 -6 -4 -2  2 4 6 8 10 12'
+'set rbcols 49 48 47 46 45 44  0 21 22 23 24 25 26'
+'d vo*1e5'
+'set gxout contour'
+'set ccolor 0'
+'set clab off'
+'set clevs  -12 -10 -8 -6 -4 -2  2 4 6 8 10 12'
+'d vo*1e5'
+'run cbarn'
 
 *GRADIENTE DE HUMEDAD ESPECÍFICA EN 925
 *ALGUNAS CONSTANTES DEL SCRIPT 'DYNAMIC.GS'
@@ -56,37 +67,19 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'R=287'
 'define f=2*omega*sin(lat*dtr)'
 'define p=lev*100'
-
 'dy=cdiff(lat,y)*dtr*a'
 'dx=cdiff(lon,x)*dtr*a*cos(lat*dtr)'
-
-
-'dqdx=cdiff(qtht,x)/dx'
-'dqdy=cdiff(qtht,y)/dy'
-
+'dqdx=cdiff(q,x)/dx'
+'dqdy=cdiff(q,y)/dy'
 'define gq=sqrt((dqdx*dqdx)+(dqdy*dqdy))'
 
-'set clevs 3 4 5 6 7 8 9'
-'set ccols 0 23 25 26 27 28 29 30' 
-
-'set gxout shaded'
-'set grads off'
-'d maskout(gq*1e8,1500-z.2(t=1,z=1)/9.80665)'
-'run cbarn'
-
-
-* HUMEDAD ESPECÍFICA
-'set gxout contour'
-'set cint 2'
-'set ccolor 1'
+* En contornos rojos el gradiente de q en (g/Kg)/100km:
+'set clevs 3 5 7 9 11'
+'set ccolor 29'
 'set cthick 6'
-'set cstyle 1'
-'set clab masked'
-*'set clopts -1 4 0.13'
-'d smth9(maskout(qtht*1000,1500-z.2(t=1,z=1)/9.80665))'
+'d smth9(maskout(gq*1e8,1500-z.2(t=1,z=1)/9.80665)))' 
 
-
-* PRESIÓN
+* ALTURA GEOPOTENCIAL
 'set grads off'
 'set gxout contour'
 'set cint 60'
@@ -95,8 +88,7 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set cstyle 1'
 'set clab masked'
 'set clopts -1 6 0.10'
-'d smth9(maskout(prestht/100,1500-z.2(t=1,z=1)/9.80665))'
-
+'d smth9(maskout(z/9.80665,1500-z.2(t=1,z=1)/9.80665))'
 
 *BARBAS
 'set gxout barb'
@@ -104,8 +96,8 @@ while ( tiempo < tiempo_cero+cant_tiempos )
 'set ccolor 1'
 'set cthick 3'
 'set cstyle 1'
-'define ukn=utht*1.943'
-'define vkn=vtht*1.943'
+'define ukn=u*1.943'
+'define vkn=v*1.943'
 'd maskout((skip(ukn,3)),1500-z.2(t=1,z=1)/9.80665);skip(vkn,3)'
 
 *Grafico el titulo
@@ -123,11 +115,11 @@ mes=substr(itime3,6,3)
 hora=substr(itime3,1,2)
 anio= substr(itime3,9,4)
 
-'draw title Humedad especifica (cont. negro, g/kg), grad. de q ((g/kg)/100km)\ y viento (kts) en 300 K 'itime1
+'draw title Altura geop (cont. violeta), grad. de q (cont. rojos, (g/kg)/100km),\ vort. relativa (somb., s-1*1e5) y viento (kts) en 925 hPa 'itime1
 
 *Guardamos la figura
 
-'printim 'carpeta_salida'/q_isen_300_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
+'printim 'carpeta_salida'/vort_geop_grad_q_925_' anio'_' mes '_' dia'_' hora Z'.gif gif white x800 y600'
 
 *Borramos la pantalla
 'c'
@@ -135,6 +127,5 @@ anio= substr(itime3,9,4)
 itime4=subwrd(line2,9)
 tiempo=itime4 + 1
 endwhile
-
 
 

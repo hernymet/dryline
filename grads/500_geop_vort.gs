@@ -1,5 +1,5 @@
 ***********************************************
-* Grafica geopotencial y vorticidad en 300hPa *
+* Grafica geopotencial y vorticidad en 500hPa *
 ***********************************************
 'reinit' 
 'set display color white'
@@ -10,19 +10,19 @@
 * Cambiar fecha en el nombre de archivo de los datos
 *****************************************************
 *****************************************************
-anio='2013'
-mes='DEC'
-mes_num='12'
-dia='01'
+anio='2015'
+mes='AUG'
+mes_num='08'
+dia='27'
 hora='00'
 *nombre_archivo='ERA-Int_pl_' anio mes_num '.nc'
 * Ingresar la cantidad total de tiempos del archivo (VER CANTIDAD DE GRÁFICOS MATLAB)
-cant_tiempos=124
+cant_tiempos=16
 *****************************************************
 *****************************************************
 
 carpeta_salida='/home/hernymet/Documents/figuras_grads/geop_vort_rel_500/'
-'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20131201.nc'
+'sdfopen /home/hernymet/Documents/reanalisis/ERA-Int_pl_20150801.nc'
 
 'set lat -55 -15'
 'set lon 260 320'
@@ -89,7 +89,7 @@ mes=substr(itime3,6,3)
 hora=substr(itime3,1,2)
 anio= substr(itime3,9,4)
 
-'draw title Altura Geopotencial (mgp), Vorticidad relativa (m2/s2*1e5)\ y viento (kts) en 500 hPa 'itime1
+'draw title Altura Geopotencial (mgp), Vorticidad relativa (1/s*1e5)\ y viento (kts) en 500 hPa 'itime1
 
 *Guardamos la figura
 

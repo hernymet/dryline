@@ -1,18 +1,18 @@
 'reinit'
 'set display color white'
 'reset'
-'run /filer2/paola/jaecol'
+'run jaecol.gs'
 'open ir_area2.ctl'
 
 
 *INICIO
-'set time 01z21feb2015'
+'set time 02z17dec2013'
 'q dims'
 line5=sublin(result,5)
 tini=subwrd(line5,9)
 
 *FIN
-'set time 23z28feb2015'
+'set time 21z21dec2013'
 'q dims'
 line5=sublin(result,5)
 tfin=subwrd(line5,9)
@@ -77,48 +77,47 @@ if ( mes = 'DEC' )
   mes2 = '12'
 endif
 
-'!gunzip /filer2/bases/IR/' anio'/ir' anio mes2 dia hora '.dat.gz'
+'!gunzip /home/hernymet/Documents/satelitales/ir' anio mes2 dia hora '.dat.gz'
 
 say anio mes2 dia hora 
 'reset'
 'set t ' tini
-'set lat -38 -22'
-'set lon -72 -56'
+'set lat -45 -30'
+'set lon -75 -54'
 'set grads off'
 'set gxout shaded'
-'set mpdset /home/salio/sa'
+'set mpdset sa'
 'set map 1'
 'set rbcols 59   56   53     29   27   25    23   21     49   47    45  43     41  39    37  35    33    72   73    74   75 76 77 78 79 1 '
 'set clevs   -85  -80 -75 -70   -65  -60    -55 -50    -45  -40   -35  -30   -25 -20   -15 -10   -5   0     5   10    15   20  25 30 35 40'
 'd ch4+75-273'
-'run /filer2/paola/cbarn'
+'run cbarn'
 'draw title 'anio' 'mes2' 'dia' 'hora':00Z'
-'printim RELAMPAGO/' anio mes2 '/' anio mes2 dia hora '00.png   white'
+'printim /home/hernymet/Dropbox/drylines/casos_de_estudio/17-20-diciembre-2013/gradiente_q_ir/' anio mes2 dia hora '00.png white'
 
 
 say anio mes2 dia hora
 'reset'
 'set t ' tini+1
-'set lat -38 -22'
-'set lon -72 -56'
+'set lat -45 -30'
+'set lon -75 -54'
 'set grads off'
 'set gxout shaded'
-'set mpdset /home/salio/sa'
+'set mpdset sa'
 'set map 1'
 'set rbcols 59   56   53     29   27   25    23   21     49   47    45  43     41  39    37  35    33    72   73    74   75 76 77 78 79 1 '
 'set clevs   -85  -80 -75 -70   -65  -60    -55 -50    -45  -40   -35  -30   -25 -20   -15 -10   -5   0     5   10    15   20  25 30 35 40'
 'd ch4+75-273'
-'run /filer2/paola/cbarn'
+'run cbarn'
 'draw title 'anio' 'mes2' 'dia' 'hora':30Z'
-'printim RELAMPAGO/' anio mes2 '/' anio mes2 dia hora '30.png   white'
+'printim /home/hernymet/Dropbox/drylines/casos_de_estudio/17-20-diciembre-2013/gradiente_q_ir/' anio mes2 dia hora '30.png white'
 
-
-'!gzip /filer2/bases/IR/' anio'/ir' anio mes2 dia hora '.dat'
+'!gzip /home/hernymet/Documents/satelitales/ir' anio mes2 dia hora '.dat'
 
 
 tini=tini+2
 endwhile
 
-'quit'
+*'quit'
 
 
